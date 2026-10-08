@@ -174,23 +174,92 @@ def lazy_scroll(rng):
     return shell("Customer Stories", body, script), f.items
 
 
+FETCH_DELAYS = [200, 1000, 2500, 5000]
+
+
+def slow_fetch(rng, seed=0):
+    """Content from an API call that takes FETCH_DELAYS[seed] ms. Unlike a
+    timer, a browser can see this request is still pending."""
+    f = Facts(rng)
+    hidden = paragraphs(f, 3)
+    ms = FETCH_DELAYS[seed % len(FETCH_DELAYS)]
+    body = '<p>Fetching account activity...</p><div id="feed"></div>'
+    script = (f"fetch('/slow/{ms}/api/__PAGE_ID__.json').then(r => r.json()).then(d => {{"
+              f" document.getElementById('feed').innerHTML = wfDecode(d.html); }});")
+    return shell("Account Activity", body, script), f.items, {"api": json.dumps({"html": b64(hidden)})}
+
+
+def infinite_scroll(rng):
+    """Three batches, each loaded when the reader reaches the bottom. Facts
+    carry their batch number, so we can see how deep a scraper got."""
+    f = Facts(rng)
+    batches = []
+    for i in range(3):
+        start = len(f.items)
+        batches.append(b64(paragraphs(f, 1)))
+        for fact in f.items[start:]:
+            fact["batch"] = i + 1
+    body = '<div id="feed"></div><div style="height:3000px"></div><div id="sentinel">Loading more...</div>'
+    script = (f"const batches = {json.dumps(batches)}; let n = 0;"
+              f" const io = new IntersectionObserver(es => {{ if (es[0].isIntersecting && n < batches.length) {{"
+              f" const d = document.createElement('div'); d.innerHTML = wfDecode(batches[n++]);"
+              f" d.style.marginBottom = '3000px'; document.getElementById('feed').appendChild(d);"
+              f" if (n == batches.length) io.disconnect(); }} }});"
+              f" io.observe(document.getElementById('sentinel'));")
+    return shell("Community Feed", body, script), f.items
+
+
+def hidden_tabs(rng):
+    """Three tabs; only the first is visible, the others are display:none but
+    already in the HTML. A scraper that renders 'what you see' loses them."""
+    f = Facts(rng)
+    panels = [paragraphs(f, 1) for _ in range(3)]
+    tabs = "".join(f'<button onclick="show({i})">Tab {i + 1}</button>' for i in range(3))
+    body = tabs + "".join(
+        f'<section class="panel" style="display:{"block" if i == 0 else "none"}">{p}</section>'
+        for i, p in enumerate(panels))
+    script = ("function show(i) { document.querySelectorAll('.panel').forEach("
+              "(p, j) => p.style.display = i == j ? 'block' : 'none'); }")
+    return shell("Technical Details", body, script), f.items
+
+
+def click_to_load(rng):
+    """Half the content only exists after the reader clicks 'Show more'."""
+    f = Facts(rng)
+    visible = paragraphs(f, 1)
+    hidden = paragraphs(f, 2)
+    body = visible + '<div id="rest"></div><button id="more-btn">Show more</button>'
+    script = (f"document.getElementById('more-btn').onclick = () => {{"
+              f" document.getElementById('rest').innerHTML = wfDecode('{b64(hidden)}'); }};")
+    return shell("Frequently Asked Questions", body, script), f.items
+
+
 PAGE_TYPES = {
     "static_article": static_article,
     "pricing_table": pricing_table,
     "js_rendered": js_rendered,
     "shadow_dom": shadow_dom,
     "lazy_scroll": lazy_scroll,
+    "slow_fetch": slow_fetch,
+    "infinite_scroll": infinite_scroll,
+    "hidden_tabs": hidden_tabs,
+    "click_to_load": click_to_load,
 }
 
 
 def generate(out_dir, seeds=4):
     out = Path(out_dir)
-    (out / "pages").mkdir(parents=True, exist_ok=True)
+    for d in ("pages", "api"):
+        (out / d).mkdir(parents=True, exist_ok=True)
     manifest = []
     for ptype, fn in PAGE_TYPES.items():
         for seed in range(seeds):
             page_id = f"{ptype}-{seed}"
-            html, facts = fn(random.Random(f"{ptype}:{seed}"))
+            rng = random.Random(f"{ptype}:{seed}")
+            res = fn(rng, seed) if fn is slow_fetch else fn(rng)
+            html, facts = res[0].replace("__PAGE_ID__", page_id), res[1]
+            for _, content in (res[2] if len(res) > 2 else {}).items():
+                (out / "api" / f"{page_id}.json").write_text(content)
             (out / "pages" / f"{page_id}.html").write_text(html)
             manifest.append({"id": page_id, "type": ptype,
                              "path": f"pages/{page_id}.html", "facts": facts})

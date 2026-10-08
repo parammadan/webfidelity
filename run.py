@@ -5,28 +5,16 @@
 """
 
 import argparse
-import functools
-import http.server
 import json
 import statistics
-import threading
 import time
 from collections import defaultdict
 from pathlib import Path
 
-from webfidelity import generator, scrapers
+from webfidelity import generator, scrapers, server
 from webfidelity.score import score_page
 
 BENCH = Path("bench")
-
-
-def serve(port):
-    handler = functools.partial(http.server.SimpleHTTPRequestHandler,
-                                directory=str(BENCH))
-    handler.log_message = lambda *a: None
-    srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
-    threading.Thread(target=srv.serve_forever, daemon=True).start()
-    return f"http://127.0.0.1:{port}/"
 
 
 def main():
@@ -35,17 +23,20 @@ def main():
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--base-url", help="where bench/ is hosted; default: serve locally")
     ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--types", help="comma-separated page types; default: all")
     args = ap.parse_args()
 
     generator.generate(BENCH)
     manifest = json.loads((BENCH / "manifest.json").read_text())
-    base = args.base_url or serve(args.port)
+    base = args.base_url or server.start(args.port)
     out_dir = Path("results") / time.strftime("%Y%m%d-%H%M%S")
     rows = []
 
     for name in args.scrapers.split(","):
         scrape = scrapers.get(name)
-        for page in manifest["pages"]:
+        pages = [p for p in manifest["pages"]
+                 if not args.types or p["type"] in args.types.split(",")]
+        for page in pages:
             for run in range(args.runs):
                 t0 = time.time()
                 try:
