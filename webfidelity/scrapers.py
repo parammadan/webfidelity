@@ -1,10 +1,18 @@
 """Scraper adapters. Each takes a URL and returns markdown (or text)."""
 
 import os
+import re
+import time
 import urllib.request
 
 import requests
 
+_env = os.path.join(os.path.dirname(__file__), "..", ".env")
+if os.path.exists(_env):
+    for line in open(_env):
+        k, _, v = line.strip().partition("=")
+        if k and v:
+            os.environ.setdefault(k, v)
 
 def trafilatura_scrape(url):
     """Raw HTML + article extraction. No JavaScript."""
@@ -42,10 +50,15 @@ def firecrawl_scrape(url):
     """Firecrawl hosted API. maxAge=0 forces a fresh scrape, no cache, so
     repeated runs measure the pipeline and not the cache."""
     key = os.environ["FIRECRAWL_API_KEY"]
-    r = requests.post("https://api.firecrawl.dev/v2/scrape",
-                      headers={"Authorization": f"Bearer {key}"},
-                      json={"url": url, "formats": ["markdown"], "maxAge": 0},
-                      timeout=120)
+    for _ in range(6):
+        r = requests.post("https://api.firecrawl.dev/v2/scrape",
+                          headers={"Authorization": f"Bearer {key}"},
+                          json={"url": url, "formats": ["markdown"], "maxAge": 0},
+                          timeout=120)
+        if r.status_code != 429:
+            break
+        wait = re.search(r"retry after (\d+)s", r.text)
+        time.sleep(int(wait.group(1)) + 2 if wait else 30)
     r.raise_for_status()
     return r.json()["data"].get("markdown", "")
 

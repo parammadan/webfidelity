@@ -74,14 +74,15 @@ def report(rows):
     for r in rows:
         groups[(r["scraper"], r["type"])].append(r)
     print(f"\n{'scraper':12} {'page type':15} {'recall':>7} {'noise':>6} {'stable':>7} {'errors':>6} {'secs':>5}")
-    for (scraper, ptype), rs in sorted(groups.items()):
+    for (scraper, ptype), all_rs in sorted(groups.items()):
+        rs = [r for r in all_rs if not r["error"]] or all_rs  # failed requests are not 0% recall
         by_page = defaultdict(set)
         for r in rs:
             by_page[r["page"]].add(r["hash"])
         stable = sum(len(h) == 1 for h in by_page.values()) / len(by_page)
         print(f"{scraper:12} {ptype:15} {statistics.mean(r['recall'] for r in rs):7.0%} "
               f"{statistics.mean(r['noise'] for r in rs):6.0%} {stable:7.0%} "
-              f"{sum(1 for r in rs if r['error']):6} {statistics.mean(r['secs'] for r in rs):5.1f}")
+              f"{sum(1 for r in all_rs if r['error']):6} {statistics.mean(r['secs'] for r in rs):5.1f}")
 
 
 if __name__ == "__main__":
