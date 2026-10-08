@@ -83,3 +83,12 @@ def _prod(xs):
     for x in xs:
         out *= x
     return out
+
+
+def reveal_selector(html):
+    """CSS selector for a 'Show more'-style button, if the source has one."""
+    m = re.search(r"<button\b([^>]*)>\s*(show|load|read|view|see)\s+(more|all)\b", html, re.I)
+    if not m:
+        return None
+    id_ = re.search(r'\bid="([^"]+)"', m.group(1))
+    return f"#{id_.group(1)}" if id_ else "button"
