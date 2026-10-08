@@ -1,0 +1,628 @@
+{
+  "metadata": {
+    "title": "Half a Page.",
+    "slug": "half-a-page",
+    "topic": "AI AGENTS · WEB SCRAPING",
+    "purpose": "A viewer who has never heard of web scraping can explain why an AI agent may answer from an incomplete page, name the two ways Firecrawl's defaults lose content, and apply the cheap fix.",
+    "register": "Explainer for newcomers; every term defined on first use.",
+    "audience": "People who use or build AI agents but know nothing about scrapers, rendering, or JavaScript.",
+    "host": "Param Madan",
+    "brand": "claude",
+    "engine": "kokoro",
+    "voice_kokoro": "af_bella",
+    "palette": "claude",
+    "style_preset": "claude",
+    "ground": "#FAF9F5",
+    "clock": "narration",
+    "greeting": "Namaste, Param",
+    "greeting_note": "hello lexicon: Hindi, one word.",
+    "color_semantics": "claude palette; one terracotta moment per beat, always on the thing that was lost or the number that matters: the snapshot line (B01), the 300 ms bar (B03), the window height (B04), 89% (B05, B06), 1 of 3 (B06B).",
+    "deviations": [
+      "IN-FOR-BEAR LAW dropped: the host is Param Madan.",
+      "OUTRO-LOCK not applied: the outro carries the host's name (WfOutro), matching earlier reels.",
+      "folderLabel is the host's name; no channel handle was supplied and none was invented.",
+      "Personal project: no PR to nikbearbrown/humanitarians-youtube (user decision, 2026-10-08). Source files go to the WebFidelity repo instead.",
+      "Beat count 12 with an extra TURN beat (B06B) for the falsifiability line."
+    ],
+    "provenance": "All figures come from the author's own measurements in ~/webfidelity (October 2026); see SOURCES.md.",
+    "tags": [
+      "AI agents",
+      "web scraping",
+      "Firecrawl",
+      "evals",
+      "LLM",
+      "benchmark"
+    ],
+    "build": {
+      "at": "2026-10-08T14:58:37",
+      "cut": "master",
+      "filled": 12,
+      "of": 12,
+      "slates": [],
+      "skin_warnings": [
+        "B09: palette=claude but the outro is 'WfOutro' — OUTRO LAW wants ClaudeTitleOutro"
+      ]
+    }
+  },
+  "beats": [
+    {
+      "beat_id": "B00",
+      "act": "ASK",
+      "new_visual_element": "Claude composer — the ask lands answered",
+      "narration_text": "Hey, this is Param Madan, and this explainer video is on how much of a web page an A I agent really sees. When an agent reads a website, it doesn't look at the page the way you do. A program called a scraper turns the page into text first. So what happens to the parts the scraper misses? Nobody tells the agent. It just answers from half a page.",
+      "estimated_duration_s": 27,
+      "audio_file": "mp3/beat-B00.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "type-on",
+        "show": [
+          {
+            "at": "0.0",
+            "event": "cold open on the Claude composer"
+          },
+          {
+            "at": "0.2",
+            "event": "the ask types itself in"
+          },
+          {
+            "at": "0.75",
+            "event": "three output lines print, the shape of the reel"
+          }
+        ],
+        "remotion": {
+          "pattern": "ClaudeComposerAsk",
+          "props": {
+            "greeting": "Namaste, Param",
+            "topic": "AI AGENTS · WEB SCRAPING",
+            "segment": "Half a Page",
+            "command": "My AI agent reads websites through a scraper. How do I know it is seeing the whole page?",
+            "runningText": "measuring what survives the scrape…",
+            "folderLabel": "Param Madan",
+            "output": [
+              "Scrapers can drop content without saying so",
+              "Firecrawl snapshots about 0.3 s after load",
+              "A free setting recovers most of it"
+            ]
+          },
+          "rendered": {
+            "out": "media/B00.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 21.57,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B00.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B00B",
+      "act": "PROMISE",
+      "new_visual_element": "the promise card — three things this video proves",
+      "narration_text": "Here's what this video is. I built a benchmark called WebFidelity and pointed it at Firecrawl, one of the most popular scrapers for A I. It shows three things. Content can vanish without a trace. We can say exactly when, and why. And one setting, at no extra cost, gets most of it back. You don't need to know anything about scraping. Every term gets explained.",
+      "estimated_duration_s": 25,
+      "audio_file": "mp3/beat-B00B.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'what this video is'",
+            "event": "eyebrow + serif headline"
+          },
+          {
+            "at": "on each claim",
+            "event": "three tiles rise: Lost, Why, Fix"
+          },
+          {
+            "at": "on 'every term'",
+            "event": "promise strip lands"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfPromise",
+          "props": {
+            "spark": "Why watch this."
+          },
+          "rendered": {
+            "out": "media/B00B.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 22.36,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B00B.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B01",
+      "act": "BLUF",
+      "new_visual_element": "the snapshot line on a timeline",
+      "narration_text": "The answer first. By default, Firecrawl takes its snapshot of a page about three hundred milliseconds after it loads. That's a third of a second. Anything the page adds after that is gone. And the output never says so. It comes back with a heading and the word loading, looking like a finished page.",
+      "estimated_duration_s": 21,
+      "audio_file": "mp3/beat-B01.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'three hundred milliseconds'",
+            "event": "terracotta snapshot line drops onto the timeline"
+          },
+          {
+            "at": "on 'gone'",
+            "event": "late blocks grey out, marked LOST"
+          },
+          {
+            "at": "on 'loading'",
+            "event": "the output card shows '# Release Notes / Loading…'"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfSnapshot",
+          "props": {
+            "spark": "The answer first."
+          },
+          "rendered": {
+            "out": "media/B01.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 18.22,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B01.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B02",
+      "act": "EVIDENCE",
+      "new_visual_element": "planted facts — the answer key",
+      "narration_text": "How do you measure something that's missing? You need an answer key. So I generated thirty six web pages and planted two hundred forty facts in them: prices, product codes, shipping counts. Some appear right away. Others only appear after JavaScript, the code that runs inside a page, adds them later. Then I scrape every page and count how many facts survived.",
+      "estimated_duration_s": 24,
+      "audio_file": "mp3/beat-B02.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'answer key'",
+            "event": "a page mock with highlighted fact chips"
+          },
+          {
+            "at": "on the numbers",
+            "event": "tiles: 36 pages, 240 facts, 9 page types"
+          },
+          {
+            "at": "on 'count'",
+            "event": "strip: found or missing, no judgement calls"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfPlanted",
+          "props": {
+            "spark": "Plant the answers."
+          },
+          "rendered": {
+            "out": "media/B02.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 21.7,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B02.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B03",
+      "act": "EVIDENCE",
+      "new_visual_element": "the timing curve",
+      "narration_text": "Here's the timing test. Content that arrives within a quarter of a second makes it, five runs out of five. At three hundred milliseconds, two out of five. From half a second on, zero, every time. A real server request is no different. I logged the traffic: Firecrawl's browser sends the request, then snapshots before the answer comes back.",
+      "estimated_duration_s": 23,
+      "audio_file": "mp3/beat-B03.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'quarter of a second'",
+            "event": "full bars rise for 0–250 ms"
+          },
+          {
+            "at": "on 'three hundred'",
+            "event": "the 2/5 bar, terracotta"
+          },
+          {
+            "at": "on 'zero'",
+            "event": "empty slots for 500 ms+"
+          },
+          {
+            "at": "on 'logged'",
+            "event": "request-log strip"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfTiming",
+          "props": {
+            "spark": "When does it look?",
+            "points": [
+              [
+                0,
+                5
+              ],
+              [
+                50,
+                5
+              ],
+              [
+                100,
+                5
+              ],
+              [
+                150,
+                5
+              ],
+              [
+                200,
+                5
+              ],
+              [
+                250,
+                5
+              ],
+              [
+                300,
+                2
+              ],
+              [
+                500,
+                0
+              ],
+              [
+                1000,
+                0
+              ],
+              [
+                2000,
+                0
+              ]
+            ]
+          },
+          "rendered": {
+            "out": "media/B03.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 21.44,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B03.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B04",
+      "act": "TURN",
+      "new_visual_element": "the 100,000-pixel window",
+      "narration_text": "The second finding is stranger. I asked Firecrawl's browser how tall its window is. One hundred thousand pixels. The whole page fits on screen at once, so the browser can never scroll. That helps some pages. But feeds that load more as you scroll, like an endless list of posts, never load at all. Scroll commands do nothing.",
+      "estimated_duration_s": 22,
+      "audio_file": "mp3/beat-B04.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'one hundred thousand'",
+            "event": "the window number counts up in terracotta"
+          },
+          {
+            "at": "on 'never scroll'",
+            "event": "scrollY stays 0"
+          },
+          {
+            "at": "on 'never load'",
+            "event": "feed batches 2 and 3 stay greyed"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfTallWindow",
+          "props": {
+            "spark": "A very tall window."
+          },
+          "rendered": {
+            "out": "media/B04.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 20.52,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B04.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B05",
+      "act": "CONSEQUENCE",
+      "new_visual_element": "the fix — 52% to 89%",
+      "narration_text": "Now the good news. Firecrawl has a setting called actions: you tell it to wait, scroll, or click before the snapshot. With waits and a click on any show more button, recall on my test pages jumps from fifty two percent to eighty nine percent. Recall just means the share of planted facts that came through. And it costs exactly the same: one credit per page.",
+      "estimated_duration_s": 25,
+      "audio_file": "mp3/beat-B05.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'fifty two'",
+            "event": "left tile 52%"
+          },
+          {
+            "at": "on 'eighty nine'",
+            "event": "right tile 89% in terracotta"
+          },
+          {
+            "at": "on 'one credit'",
+            "event": "strip: same price"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfFix",
+          "props": {
+            "spark": "The cheap fix."
+          },
+          "rendered": {
+            "out": "media/B05.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 22.31,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B05.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B06",
+      "act": "PAYOFF",
+      "new_visual_element": "the real web",
+      "narration_text": "Test pages aren't the real web, so I checked real sites. There, the answer key is a patient browser that waits and scrolls, loaded before and after each scrape. On forty six sites I never tuned anything on, Firecrawl captured eighty five percent by default. Ordinary pages come through well. And both failures showed up on real sites too.",
+      "estimated_duration_s": 23,
+      "audio_file": "mp3/beat-B06.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'twenty five sites'",
+            "event": "big 89% tile"
+          },
+          {
+            "at": "on 'both failures'",
+            "event": "two rows: delayed page 0% → 100% with waits; scroll feed 9% → 9%"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfRealWeb",
+          "props": {
+            "spark": "On the real web.",
+            "value": "85%",
+            "caption": "captured by default · 46 held-out real sites"
+          },
+          "rendered": {
+            "out": "media/B06.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 21.5,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B06.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B06B",
+      "act": "TURN",
+      "new_visual_element": "the honest failure",
+      "narration_text": "One thing didn't hold up. I built a detector to flag incomplete scrapes without an answer key. On my own test pages, it was right nine times in ten. On real sites it had never seen, it caught two incomplete pages out of nine. Rules tuned on your own pages can fool you. That's why every number in this video was checked on data the rules never saw.",
+      "estimated_duration_s": 26,
+      "audio_file": "mp3/beat-B06B.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on 'nine times in ten'",
+            "event": "left tile 90%"
+          },
+          {
+            "at": "on 'one out of three'",
+            "event": "right tile 1 of 3 in terracotta"
+          },
+          {
+            "at": "on 'never saw'",
+            "event": "strip: hold data back"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfHonest",
+          "props": {
+            "spark": "What didn't hold.",
+            "testValue": "90%",
+            "realValue": "2 of 9"
+          },
+          "rendered": {
+            "out": "media/B06B.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 21.67,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B06B.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B07",
+      "act": "VERDICT",
+      "new_visual_element": "three things to do",
+      "narration_text": "So here's what you can do. If a page loads data after it opens, add a wait. If it's an endless feed, a scroll command won't save you, so fetch its pages directly. And whenever you measure anything, keep a test set you never tune on. The settings will change. The habit of checking won't.",
+      "estimated_duration_s": 21,
+      "audio_file": "mp3/beat-B07.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "illustrate",
+        "show": [
+          {
+            "at": "on each rule",
+            "event": "three rows rise"
+          },
+          {
+            "at": "on 'the habit'",
+            "event": "strip lands"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfVerdict",
+          "props": {
+            "spark": "What to do."
+          },
+          "rendered": {
+            "out": "media/B07.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 18.09,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B07.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B08",
+      "act": "HANDOFF",
+      "new_visual_element": "Claude composer — the viewer's prompt",
+      "narration_text": "Your turn. Here's the prompt. Pick a page your agent reads every day. Ask Claude to list five facts that should be on it, then check whether your scraper's output contains all five. If one is missing, you've found something your agent never sees.",
+      "estimated_duration_s": 17,
+      "audio_file": "mp3/beat-B08.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "type-on",
+        "show": [
+          {
+            "at": "0.1",
+            "event": "composer returns, greeting 'Your turn.'"
+          },
+          {
+            "at": "0.3",
+            "event": "the prompt types itself in"
+          }
+        ],
+        "remotion": {
+          "pattern": "ClaudeComposerAsk",
+          "props": {
+            "greeting": "Your turn.",
+            "topic": "AI AGENTS · YOUR TURN",
+            "segment": "What Your Agent Never Sees",
+            "command": "Here is a page my AI agent reads every day: <URL>. List five specific facts that should appear on it, then check whether this scraper output contains all five: <paste output>.",
+            "runningText": "paste this into Claude…",
+            "folderLabel": "Param Madan"
+          },
+          "rendered": {
+            "out": "media/B08.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 15.34,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B08.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    },
+    {
+      "beat_id": "B09",
+      "act": "OUTRO",
+      "new_visual_element": "the title card",
+      "narration_text": "Half a page. This has been Param Madan.",
+      "estimated_duration_s": 3,
+      "audio_file": "mp3/beat-B09.mp3",
+      "shot": {
+        "type": "GRAPHIC",
+        "source": "own",
+        "motion": "static",
+        "show": [
+          {
+            "at": "0.0",
+            "event": "title at poster scale, terracotta period"
+          },
+          {
+            "at": "0.3",
+            "event": "host name and subline"
+          }
+        ],
+        "remotion": {
+          "pattern": "WfOutro",
+          "props": {
+            "title": "Half a Page.",
+            "handle": "Param Madan",
+            "subline": "WebFidelity"
+          },
+          "rendered": {
+            "out": "media/B09.mp4",
+            "at": ""
+          }
+        }
+      },
+      "actual_duration_s": 2.52,
+      "build": {
+        "status": "VIDEO",
+        "src": "media/B09.mp4",
+        "filled_by": "media",
+        "at": "2026-10-08T14:58:37"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+Half a Page. What AI scrapers silently drop.
+
+When an AI agent reads a website, a scraper turns the page into text first, and whatever the scraper misses, the agent never sees. I built WebFidelity, a benchmark with planted-fact test pages and 74 real sites, and pointed it at Firecrawl. By default, Firecrawl snapshots a page about 300 ms after it loads, doesn't wait for in-flight requests, and runs in a 100,000-pixel-tall window that can't scroll. A free setting (actions) lifts recall from 52% to 89%, and on ordinary real pages Firecrawl does well (85% across 46 held-out sites).
+
+The claim: scrapers can lose content without any sign in the output, and you can only catch it by measuring against an answer key, on data you never tuned on.
+
+Chapters
+0:00 Cold open
+0:21 What this video is
+0:43 The answer: a 300 ms snapshot
+1:02 Planting an answer key
+1:23 The timing test
+1:45 A 100,000-pixel window
+2:05 The free fix
+2:28 On the real web
+2:49 What didn't hold up
+3:11 What to do
+3:29 Your turn
+3:44 Outro
+
+Your turn (paste into Claude):
+Here is a page my AI agent reads every day: <URL>. List five specific facts that should appear on it, then check whether this scraper output contains all five: <paste output>.
+
+Code, data and method: https://github.com/parammadan/webfidelity
+Measured October 2026 against Firecrawl's hosted API. Renderers change, so re-run before relying on the numbers.
+
+Param Madan
