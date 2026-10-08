@@ -4,6 +4,7 @@ Inputs are what a real user has: the scraped markdown, and optionally the
 page's HTML source. Output is a score in [0, 1] plus the reasons behind it.
 """
 
+import html as htmllib
 import re
 
 PLACEHOLDER = re.compile(
@@ -48,8 +49,10 @@ def source_coverage(markdown, html):
     main = re.search(r"<(main|article)\b.*?</\1>", html, re.S | re.I)
     if main:  # boilerplate (nav, footer, banners) is fine to drop
         html = main.group(0)
-    blocks = TAG.sub(" ", BLOCK.sub("\n", html)).splitlines()
-    sents = [squash(s) for b in blocks for s in re.split(r"(?<=[.!?])\s", b) if words(s) >= 6]
+    blocks = htmllib.unescape(TAG.sub(" ", BLOCK.sub("\n", html))).splitlines()
+    # a sentence needs real words; timestamps and bare numbers don't count
+    sents = [squash(s) for b in blocks for s in re.split(r"(?<=[.!?])\s", b)
+             if len(re.findall(r"[A-Za-z]{2,}", s)) >= 4]
     if len(sents) < 3:
         return None
     flat = squash(md_text(markdown))
@@ -72,7 +75,7 @@ def detect(markdown, html=None):
         hooks = [k for k, rx in ASYNC_HOOKS.items() if rx.search(html)]
         mounts = len(EMPTY_MOUNT.findall(html))
         if REVEAL_BUTTON.search(html):
-            reasons["reveal_button"] = 0.5
+            reasons["reveal_button"] = 0.25  # common on complete real pages
         # async hooks alone are normal on complete pages; they only count when
         # the output also looks thin or the source has empty slots to fill
         thin = words(markdown) < 60
@@ -96,13 +99,16 @@ def _prod(xs):
 
 
 def reveal_selector(html):
-    """CSS selector for a 'Show more'-style button, if the source has one."""
-    m = re.search(r"<(button|a)\b([^>]*)>\s*((show|load|read|view|see)\s+)?more\b", html, re.I)
+    """CSS selector for a 'Show more'-style BUTTON, or None. Links are never
+    clicked (they navigate away), and selectors that aren't plain, valid CSS
+    are skipped: on real sites a bad click is worse than no click."""
+    m = re.search(r"<button\b([^>]*)>\s*((show|load|read|view|see)\s+)?more\b", html, re.I)
     if not m:
         return None
-    tag, attrs = m.group(1).lower(), m.group(2)
-    id_ = re.search(r'\bid="([^"]+)"', attrs)
-    cls = re.search(r'\bclass="([^"]+)"', attrs)
+    id_ = re.search(r'\bid="([A-Za-z][\w-]*)"', m.group(1))
     if id_:
         return f"#{id_.group(1)}"
-    return f"{tag}.{'.'.join(cls.group(1).split())}" if cls else tag
+    cls = re.search(r'\bclass="([^"]+)"', m.group(1))
+    if cls and all(re.fullmatch(r"[A-Za-z][\w-]*", c) for c in cls.group(1).split()):
+        return "button." + ".".join(cls.group(1).split())
+    return None
