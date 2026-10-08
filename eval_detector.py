@@ -18,10 +18,12 @@ BENCH = Path("bench")
 
 
 def load():
+    sup = Path("results/SUPERSEDED.json")
+    skip = {(x["dir"], x["type"]) for x in json.loads(sup.read_text())["skip"]} if sup.exists() else set()
     seen, rows = set(), []
     for scores in sorted(Path("results").glob("*/scores.json")):
         for r in json.loads(scores.read_text()):
-            if r["error"]:
+            if r["error"] or (scores.parent.name, r["type"]) in skip:
                 continue
             md_path = scores.parent / r["scraper"] / r["page"] / f"run{r['run']}.md"
             key = (r["scraper"], r["page"], r["run"], scores.parent.name)

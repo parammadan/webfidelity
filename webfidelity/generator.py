@@ -199,13 +199,18 @@ def infinite_scroll(rng):
         batches.append(b64(paragraphs(f, 1)))
         for fact in f.items[start:]:
             fact["batch"] = i + 1
-    body = '<div id="feed"></div><div style="height:3000px"></div><div id="sentinel">Loading more...</div>'
-    script = (f"const batches = {json.dumps(batches)}; let n = 0;"
-              f" const io = new IntersectionObserver(es => {{ if (es[0].isIntersecting && n < batches.length) {{"
+    body = ('<div id="feed" style="overflow-anchor:none"></div><div style="height:3000px"></div>'
+            '<div id="sentinel" style="overflow-anchor:none">Loading more...</div>')
+    # classic scroll-listener feed: each time the reader nears the bottom,
+    # the next batch arrives after a 300ms "network" delay
+    script = (f"const batches = {json.dumps(batches)}; let n = 0, busy = false;"
+              f" addEventListener('scroll', () => {{"
+              f" const s = document.getElementById('sentinel').getBoundingClientRect();"
+              f" if (busy || n >= batches.length || s.top > innerHeight + 200) return;"
+              f" busy = true; setTimeout(() => {{"
               f" const d = document.createElement('div'); d.innerHTML = wfDecode(batches[n++]);"
               f" d.style.marginBottom = '3000px'; document.getElementById('feed').appendChild(d);"
-              f" if (n == batches.length) io.disconnect(); }} }});"
-              f" io.observe(document.getElementById('sentinel'));")
+              f" busy = false; }}, 300); }});")
     return shell("Community Feed", body, script), f.items
 
 
