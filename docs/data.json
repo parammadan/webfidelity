@@ -1,0 +1,707 @@
+{
+ "timing": [
+  {
+   "delay_ms": 0,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 50,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 100,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 150,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 200,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 250,
+   "default": 1.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 300,
+   "default": 0.4,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 500,
+   "default": 0.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 1000,
+   "default": 0.0,
+   "runs": 5,
+   "waitFor": 1.0
+  },
+  {
+   "delay_ms": 2000,
+   "default": 0.0,
+   "runs": 5,
+   "waitFor": 1.0
+  }
+ ],
+ "retry": [
+  {
+   "type": "static_article",
+   "default": 1.0,
+   "actions": 1.0
+  },
+  {
+   "type": "pricing_table",
+   "default": 1.0,
+   "actions": 1.0
+  },
+  {
+   "type": "js_rendered",
+   "default": 0.0,
+   "actions": 1.0
+  },
+  {
+   "type": "shadow_dom",
+   "default": 1.0,
+   "actions": 1.0
+  },
+  {
+   "type": "lazy_scroll",
+   "default": 0.3333333333333333,
+   "actions": 1.0
+  },
+  {
+   "type": "slow_fetch",
+   "default": 0.0,
+   "actions": 1.0
+  },
+  {
+   "type": "infinite_scroll",
+   "default": 0.0,
+   "actions": 0.0
+  },
+  {
+   "type": "hidden_tabs",
+   "default": 1.0,
+   "actions": 1.0
+  },
+  {
+   "type": "click_to_load",
+   "default": 0.3333333333333333,
+   "actions": 1.0
+  }
+ ],
+ "real": [
+  {
+   "set": "tuning",
+   "url": "https://quotes.toscrape.com/js/",
+   "category": "practice-js",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 18,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://quotes.toscrape.com/scroll",
+   "category": "practice-scroll",
+   "default": 0.09,
+   "actions": 0.09,
+   "ref_sentences": 200,
+   "flagged": true,
+   "reasons": [
+    "placeholder_text"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://quotes.toscrape.com/",
+   "category": "practice-static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 18,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://books.toscrape.com/",
+   "category": "practice-static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 5,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://webscraper.io/test-sites/e-commerce/scroll",
+   "category": "practice-scroll",
+   "default": 0.571,
+   "actions": 1.0,
+   "ref_sentences": 7,
+   "flagged": true,
+   "reasons": [
+    "source_coverage_62%"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://webscraper.io/test-sites/e-commerce/more",
+   "category": "practice-load-more",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 7,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://webscraper.io/test-sites/e-commerce/ajax",
+   "category": "practice-ajax",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 6,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://webscraper.io/test-sites/tables",
+   "category": "practice-table",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 5,
+   "flagged": true,
+   "reasons": [
+    "source_coverage_60%"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.scrapethissite.com/pages/ajax-javascript/",
+   "category": "practice-ajax",
+   "default": 0.9,
+   "actions": 0.9,
+   "ref_sentences": 10,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.scrapethissite.com/pages/simple/",
+   "category": "practice-static",
+   "default": 0.933,
+   "actions": 0.933,
+   "ref_sentences": 15,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://en.wikipedia.org/wiki/Web_scraping",
+   "category": "static",
+   "default": 0.851,
+   "actions": 0.851,
+   "ref_sentences": 201,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://news.ycombinator.com/",
+   "category": "static",
+   "default": 0.98,
+   "actions": 0.98,
+   "ref_sentences": 50,
+   "flagged": true,
+   "reasons": [
+    "source_coverage_77%"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://docs.python.org/3/library/asyncio.html",
+   "category": "static",
+   "default": 0.8,
+   "actions": 0.8,
+   "ref_sentences": 35,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://pypi.org/project/requests/",
+   "category": "static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 24,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 205,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://react.dev/learn",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 119,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://vuejs.org/guide/introduction.html",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 86,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://docs.firecrawl.dev/introduction",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 0.0,
+   "ref_sentences": 67,
+   "flagged": false,
+   "reasons": [
+    "async_timer+scroll"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.npmjs.com/package/react",
+   "category": "app",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 14,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://github.com/trending",
+   "category": "app",
+   "default": 0.95,
+   "actions": 0.85,
+   "ref_sentences": 20,
+   "flagged": false,
+   "reasons": [
+    "placeholder_text"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://github.com/firecrawl/firecrawl",
+   "category": "app",
+   "default": 0.986,
+   "actions": 0.986,
+   "ref_sentences": 217,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://openlibrary.org/search?q=web+scraping",
+   "category": "app",
+   "default": 1.0,
+   "actions": 0.0,
+   "ref_sentences": 22,
+   "flagged": true,
+   "reasons": [
+    "placeholder_text",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.timeanddate.com/worldclock/",
+   "category": "app",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 11,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.bbc.com/news",
+   "category": "news",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 65,
+   "flagged": false,
+   "reasons": [
+    "async_timer"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://lobste.rs/",
+   "category": "news",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 50,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.worldometers.info/world-population/",
+   "category": "data",
+   "default": 0.997,
+   "actions": 0.997,
+   "ref_sentences": 318,
+   "flagged": true,
+   "reasons": [
+    "reveal_button",
+    "source_coverage_68%"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://forecast.weather.gov/MapClick.php?lat=42.36&lon=-71.06",
+   "category": "data",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 47,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "tuning",
+   "url": "https://www.ycombinator.com/companies/firecrawl",
+   "category": "data",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 53,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://quotes.toscrape.com/js-delayed/page/2/?delay=2000",
+   "category": "practice-js-delayed",
+   "default": 0.0,
+   "actions": 1.0,
+   "ref_sentences": 38,
+   "flagged": false,
+   "reasons": [
+    "async_timer"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://books.toscrape.com/catalogue/category/books/travel_2/index.html",
+   "category": "practice-static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 5,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.scrapethissite.com/pages/forms/",
+   "category": "practice-static",
+   "default": 0.971,
+   "actions": 0.971,
+   "ref_sentences": 34,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.scrapethissite.com/pages/frames/",
+   "category": "practice-frames",
+   "default": 0.889,
+   "actions": 0.889,
+   "ref_sentences": 9,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://webscraper.io/test-sites/e-commerce/scroll/computers/laptops",
+   "category": "practice-scroll",
+   "default": 0.094,
+   "actions": 0.094,
+   "ref_sentences": 32,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://webscraper.io/test-sites/e-commerce/more/computers/laptops",
+   "category": "practice-load-more",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 6,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://webscraper.io/test-sites/e-commerce/ajax/computers/laptops",
+   "category": "practice-ajax",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 6,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops",
+   "category": "practice-static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 117,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://en.wikipedia.org/wiki/Large_language_model",
+   "category": "static",
+   "default": 0.806,
+   "actions": 0.806,
+   "ref_sentences": 810,
+   "flagged": false,
+   "reasons": [
+    "async_fetch"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://news.ycombinator.com/show",
+   "category": "static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 67,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://docs.python.org/3/tutorial/classes.html",
+   "category": "static",
+   "default": 0.976,
+   "actions": 0.976,
+   "ref_sentences": 293,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://pypi.org/project/numpy/",
+   "category": "static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 38,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://arxiv.org/list/cs.AI/recent",
+   "category": "static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 187,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 117,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://nextjs.org/docs",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 31,
+   "flagged": true,
+   "reasons": [
+    "async_timer",
+    "source_coverage_71%"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://svelte.dev/docs/svelte/overview",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 10,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://tailwindcss.com/docs/installation",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 22,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.npmjs.com/package/express",
+   "category": "app",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 39,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://github.com/topics/web-scraping",
+   "category": "app",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 46,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://huggingface.co/models",
+   "category": "app",
+   "default": 0.667,
+   "actions": 1.0,
+   "ref_sentences": 6,
+   "flagged": true,
+   "reasons": [
+    "source_coverage_66%"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://stackoverflow.com/questions/tagged/web-scraping",
+   "category": "app",
+   "default": 0.838,
+   "actions": 0.838,
+   "ref_sentences": 74,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.theguardian.com/international",
+   "category": "news",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 174,
+   "flagged": false,
+   "reasons": [
+    "async_scroll",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.npr.org/sections/news/",
+   "category": "news",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 75,
+   "flagged": false,
+   "reasons": [
+    "async_timer",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.worldometers.info/coronavirus/",
+   "category": "data",
+   "default": 0.996,
+   "actions": 0.996,
+   "ref_sentences": 252,
+   "flagged": true,
+   "reasons": [
+    "reveal_button",
+    "source_coverage_70%"
+   ]
+  },
+  {
+   "set": "held-out 1",
+   "url": "https://www.x-rates.com/table/?from=USD&amount=1",
+   "category": "data",
+   "default": 0.982,
+   "actions": 0.982,
+   "ref_sentences": 57,
+   "flagged": true,
+   "reasons": [
+    "source_coverage_36%"
+   ]
+  }
+ ],
+ "detector": [
+  {
+   "set": "tuning",
+   "sites": 28,
+   "incomplete": 2,
+   "caught": 2,
+   "false_alarms": 4
+  },
+  {
+   "set": "held-out 1",
+   "sites": 25,
+   "incomplete": 3,
+   "caught": 1,
+   "false_alarms": 3
+  }
+ ]
+}

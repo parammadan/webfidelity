@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebFidelity</title>
+<meta name="description" content="How much of a web page survives the scrape? Measuring silent content loss in Firecrawl and other scrapers.">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --code: #f0efec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --code: #262624;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --code: #262624;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 48px 16px 96px; }
+h1 { font-size: 40px; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.02em; }
+h2 { font-size: 24px; margin: 56px 0 8px; letter-spacing: -0.01em; }
+p { color: var(--ink-2); margin: 8px 0; }
+p strong, li strong { color: var(--ink); }
+.lede { font-size: 19px; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+a { color: var(--s1); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 32px 0 8px; }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 16px 18px; }
+.tile .v { font-size: 34px; font-weight: 650; letter-spacing: -0.02em; }
+.tile .l { color: var(--ink-2); font-size: 14px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 20px; margin: 16px 0; position: relative; }
+.card h3 { margin: 0 0 4px; font-size: 16px; }
+.card .sub { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--muted); font-size: 12px; font-family: inherit; }
+svg .lbl { fill: var(--ink-2); }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--page);
+  font-size: 13px; padding: 6px 9px; border-radius: 6px; white-space: nowrap; opacity: 0; transition: opacity .1s; z-index: 2; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--grid); }
+th { color: var(--muted); font-weight: 500; font-size: 13px; }
+td.n, th.n { text-align: right; }
+details { margin-top: 8px; color: var(--ink-2); font-size: 14px; }
+.theme { position: fixed; top: 12px; right: 12px; background: var(--surface); color: var(--ink-2);
+  border: 1px solid var(--ring); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+ul { color: var(--ink-2); padding-left: 20px; }
+footer { margin-top: 64px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<button class="theme" id="theme" aria-label="Toggle dark mode">Theme</button>
+<main>
+  <h1>WebFidelity</h1>
+  <p class="lede">How much of a web page survives the scrape? AI agents read the web through scrapers, and when a scraper silently drops content, the agent answers from half a page. This project measures that loss, mainly in <a href="https://firecrawl.dev">Firecrawl</a>.</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <h2>1. Default scrapes snapshot about 300 ms after load</h2>
+  <p>Content that JavaScript adds later is dropped, and nothing in the output says so: the heading and a "Loading..." line come back looking like a finished page. Setting <code>waitFor</code> fixes it every time.</p>
+  <div class="card" id="c-timing">
+    <h3>Share of scrapes that captured JS-rendered content</h3>
+    <p class="sub">Synthetic page, content injected after N ms. 5 runs per delay (default), 1 run with waitFor.</p>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Default</span><span><i style="background:var(--s2)"></i>waitFor: 5000</span></div>
+    <div id="timing"></div>
+  </div>
+  <p>On a real site, <code>quotes.toscrape.com/js-delayed</code> with a 2 s delay scored <strong>0%</strong> by default and <strong>100%</strong> with waits.</p>
+
+  <h2>2. In-flight API calls aren't awaited</h2>
+  <p>Our page server logs show Firecrawl's browser <em>does</em> send the page's API request, about 0.25 s after load. It then takes the snapshot before the response arrives. A plain Playwright scraper that waits for the network to go quiet gets everything.</p>
+  <div class="card">
+    <table>
+      <tr><th>API latency</th><th class="n">Firecrawl default</th><th class="n">Playwright (networkidle)</th></tr>
+      <tr><td>200 ms</td><td class="n">3 / 3</td><td class="n">100%</td></tr>
+      <tr><td>1 s</td><td class="n">0 / 3</td><td class="n">100%</td></tr>
+      <tr><td>2.5 s</td><td class="n">0 / 3</td><td class="n">100%</td></tr>
+      <tr><td>5 s</td><td class="n">0 / 3</td><td class="n">100%</td></tr>
+    </table>
+  </div>
+
+  <h2>3. The browser window is 100,000 px tall</h2>
+  <p>Asked from inside the page, Firecrawl's browser reports <code>innerHeight = 100000</code> and <code>scrollY</code> stays 0 after every scroll action. That makes "when it comes into view" lazy-loading fire immediately, which is clever. But feeds that load on scroll events never load, and scroll actions do nothing.</p>
+  <div class="card">
+    <table>
+      <tr><th>Infinite-scroll page</th><th class="n">Default</th><th class="n">With scroll actions</th></tr>
+      <tr><td>Synthetic feed (3 batches)</td><td class="n">0%</td><td class="n">0%</td></tr>
+      <tr><td>quotes.toscrape.com/scroll</td><td class="n">9%</td><td class="n">9%</td></tr>
+      <tr><td>webscraper.io laptops feed (held out)</td><td class="n">9%</td><td class="n">9%</td></tr>
+    </table>
+  </div>
+
+  <h2>Actions fix most of it, at no extra cost</h2>
+  <p>Re-scraping with waits and a click on any "Show more" button costs 1 credit per page, the same as a plain scrape. On the synthetic bench it fixes everything except finding 3.</p>
+  <div class="card" id="c-retry">
+    <h3>Fact recall by page type</h3>
+    <p class="sub">36 synthetic pages with planted facts (9 types × 4 variants).</p>
+    <div class="legend"><span><i style="background:var(--s1)"></i>Default</span><span><i style="background:var(--s2)"></i>With actions</span></div>
+    <div id="retry"></div>
+  </div>
+
+  <h2>On the normal web, Firecrawl does well</h2>
+  <p>On real sites the answer key is a patient local browser: wait for the network to go quiet, scroll until the page stops growing, and load it both before and after the Firecrawl scrape so that content changing by the minute doesn't count as missed.</p>
+  <div class="card" id="c-real">
+    <h3>Coverage per real site, default settings</h3>
+    <p class="sub">Share of the reference text found in Firecrawl’s output, grouped in 10% bins. One dot per site; hover for the URL.</p>
+    <div id="real"></div>
+  </div>
+
+  <h2>A detector that didn't generalize</h2>
+  <p>Can you tell that a scrape is incomplete <em>without</em> an answer key? A rule-based detector looked strong on synthetic pages, then fell apart on real held-out sites. Reading a site's external JS files didn't help either: scroll code shows up in 56% of complete sites and 60% of incomplete ones.</p>
+  <div class="card"><table id="det"></table></div>
+  <p><strong>Proposal:</strong> the signal that would make this reliable is one only the renderer has: how many requests were still pending, and how long the page had been quiet, when the snapshot was taken. Exposing that in response metadata would let callers retry only the scrapes that need it.</p>
+
+  <h2>Mistakes caught along the way</h2>
+  <ul>
+    <li>Rate-limit errors were scored as 0% recall, which produced a fake "unstable" result. Errors are now excluded.</li>
+    <li>The first synthetic infinite-scroll page was broken (Chrome's scroll anchoring). Its results are marked invalid.</li>
+    <li>The first real-site scorer tripped on markdown links, page drift and boilerplate: Hacker News scored 17%, and the corrected figure is 98%.</li>
+    <li>Blind "Show more" clicking broke two real sites, so the click step now targets only buttons with plain selectors.</li>
+  </ul>
+
+  <footer>Code, data and method: <a href="https://github.com/parammadan/webfidelity">github.com/parammadan/webfidelity</a> · Param Madan · Measured October 2026 against Firecrawl's hosted API.</footer>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const pct = x => Math.round(x * 100) + "%";
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function tip(card) {
+  let t = card.querySelector(".tip");
+  if (!t) { t = document.createElement("div"); t.className = "tip"; card.appendChild(t); }
+  return {
+    show(html, x, y) { t.innerHTML = html; t.style.opacity = 1;
+      const r = card.getBoundingClientRect(), w = t.offsetWidth;
+      t.style.left = Math.min(Math.max(x - r.left - w / 2, 4), r.width - w - 4) + "px";
+      t.style.top = (y - r.top - 44) + "px"; },
+    hide() { t.style.opacity = 0; }
+  };
+}
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+function timingChart(data) {
+  const box = $("#timing"); box.innerHTML = "";
+  const W = 800, H = 260, m = { l: 44, r: 16, t: 12, b: 36 };
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": "Capture rate by delay: 100% up to 250 ms, 40% at 300 ms, 0% from 500 ms; waitFor always 100%" }, box);
+  const n = data.length, x = i => m.l + i * (W - m.l - m.r) / (n - 1), y = v => m.t + (1 - v) * (H - m.t - m.b);
+  for (const v of [0, .5, 1]) {
+    el("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: css(v ? "--grid" : "--axis"), "stroke-width": 1 }, svg);
+    el("text", { x: m.l - 8, y: y(v) + 4, "text-anchor": "end" }, svg).textContent = pct(v);
+  }
+  data.forEach((d, i) => { el("text", { x: x(i), y: H - 12, "text-anchor": "middle" }, svg).textContent = d.delay_ms + " ms"; });
+  for (const [key, color] of [["waitFor", "--s2"], ["default", "--s1"]]) {
+    el("polyline", { points: data.map((d, i) => `${x(i)},${y(d[key])}`).join(" "), fill: "none",
+      stroke: css(color), "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+    data.forEach((d, i) => el("circle", { cx: x(i), cy: y(d[key]), r: 4.5, fill: css(color), stroke: css("--surface"), "stroke-width": 2 }, svg));
+  }
+  const cut = data.findIndex(d => d.default < 1);
+  el("text", { x: x(cut) + 8, y: y(0.45), class: "lbl" }, svg).textContent = "← drops off here";
+  const T = tip($("#c-timing")), cross = el("line", { y1: m.t, y2: H - m.b, stroke: css("--axis"), opacity: 0 }, svg);
+  data.forEach((d, i) => {
+    const hit = el("rect", { x: x(i) - (W - m.l - m.r) / (2 * (n - 1)), y: m.t, width: (W - m.l - m.r) / (n - 1), height: H - m.t - m.b, fill: "transparent" }, svg);
+    hit.addEventListener("mousemove", e => { cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", 1);
+      T.show(`<b>${d.delay_ms} ms</b> · default ${Math.round(d.default * d.runs)}/${d.runs} · waitFor ${pct(d.waitFor)}`, e.clientX, e.clientY); });
+    hit.addEventListener("mouseleave", () => { cross.setAttribute("opacity", 0); T.hide(); });
+  });
+}
+
+const NAMES = { static_article: "Static article", pricing_table: "Pricing table", js_rendered: "JS-rendered (800 ms)",
+  shadow_dom: "Shadow DOM", lazy_scroll: "Lazy scroll", slow_fetch: "Slow API (0.2–5 s)",
+  infinite_scroll: "Infinite scroll", hidden_tabs: "Hidden tabs", click_to_load: "Click to load" };
+
+function retryChart(data) {
+  const box = $("#retry"); box.innerHTML = "";
+  const W = 800, row = 34, m = { l: 170, r: 56, t: 8, b: 30 }, H = m.t + m.b + row * data.length;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Recall by page type, default vs with actions" }, box);
+  const x = v => m.l + v * (W - m.l - m.r);
+  for (const v of [0, .5, 1]) {
+    el("line", { x1: x(v), x2: x(v), y1: m.t, y2: H - m.b, stroke: css(v ? "--grid" : "--axis") }, svg);
+    el("text", { x: x(v), y: H - 10, "text-anchor": "middle" }, svg).textContent = pct(v);
+  }
+  const T = tip($("#c-retry"));
+  data.forEach((d, i) => {
+    const cy = m.t + row * i + row / 2;
+    el("text", { x: m.l - 12, y: cy + 4, "text-anchor": "end", class: "lbl" }, svg).textContent = NAMES[d.type] || d.type;
+    el("line", { x1: x(Math.min(d.default, d.actions)), x2: x(Math.max(d.default, d.actions)), y1: cy, y2: cy, stroke: css("--axis"), "stroke-width": 2 }, svg);
+    const same = Math.abs(d.default - d.actions) < 0.005;
+    el("circle", { cx: x(d.actions), cy, r: 6, fill: css("--s2"), stroke: css("--surface"), "stroke-width": 2 }, svg);
+    el("circle", { cx: x(d.default), cy: same ? cy : cy, r: same ? 3.5 : 6, fill: css("--s1"), stroke: css("--surface"), "stroke-width": 2 }, svg);
+    if (d.actions - d.default > 0.3) el("text", { x: x(d.actions) + 12, y: cy + 4, class: "lbl" }, svg).textContent = `+${Math.round((d.actions - d.default) * 100)} pts`;
+    const hit = el("rect", { x: 0, y: cy - row / 2, width: W, height: row, fill: "transparent" }, svg);
+    hit.addEventListener("mousemove", e => T.show(`<b>${NAMES[d.type]}</b> · default ${pct(d.default)} · actions ${pct(d.actions)}`, e.clientX, e.clientY));
+    hit.addEventListener("mouseleave", () => T.hide());
+  });
+}
+
+function realChart(rows) {
+  const box = $("#real"); box.innerHTML = "";
+  const sets = [...new Set(rows.map(r => r.set))];
+  const W = 800, band = 70, m = { l: 110, r: 16, t: 8, b: 30 }, H = m.t + m.b + band * sets.length;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Coverage per real site by evaluation set" }, box);
+  const x = v => m.l + v * (W - m.l - m.r);
+  for (const v of [0, .25, .5, .75, 1]) {
+    el("line", { x1: x(v), x2: x(v), y1: m.t, y2: H - m.b, stroke: css(v ? "--grid" : "--axis") }, svg);
+    el("text", { x: x(v), y: H - 10, "text-anchor": "middle" }, svg).textContent = pct(v);
+  }
+  const T = tip($("#c-real"));
+  sets.forEach((s, si) => {
+    const rs = rows.filter(r => r.set === s).sort((a, b) => a.default - b.default);
+    const cy = m.t + band * si + band / 2, mean = rs.reduce((a, r) => a + r.default, 0) / rs.length;
+    el("text", { x: m.l - 12, y: cy - 4, "text-anchor": "end", class: "lbl" }, svg).textContent = s;
+    el("text", { x: m.l - 12, y: cy + 12, "text-anchor": "end" }, svg).textContent = `${rs.length} sites · mean ${pct(mean)}`;
+    // unit chart: 10% bins, dots wrap in a small grid inside each bin
+    const binW = (W - m.l - m.r) / 10, cols = Math.floor(binW / 11), counts = {};
+    rs.forEach(r => {
+      const b = Math.min(9, Math.floor(r.default * 10)), k = counts[b] = (counts[b] || 0) + 1;
+      const col = (k - 1) % cols, rw = Math.floor((k - 1) / cols);
+      const cx = m.l + b * binW + 7 + col * 11, cyy = cy + 22 - rw * 11;
+      const dot = el("circle", { cx, cy: cyy, r: 4.5, fill: css("--s1"), stroke: css("--surface"), "stroke-width": 1.5 }, svg);
+      const hit = el("circle", { cx, cy: cyy, r: 9, fill: "transparent" }, svg);
+      hit.addEventListener("mousemove", e => T.show(`<b>${r.url.replace(/^https?:\/\//, "").slice(0, 48)}</b> · ${pct(r.default)} default · ${pct(r.actions)} actions`, e.clientX, e.clientY));
+      hit.addEventListener("mouseleave", () => T.hide());
+    });
+  });
+}
+
+function detTable(rows) {
+  const t = $("#det");
+  t.innerHTML = `<tr><th>Evaluation set</th><th class="n">Sites</th><th class="n">Incomplete</th><th class="n">Caught</th><th class="n">False alarms</th></tr>
+    <tr><td>Synthetic, held-out variants</td><td class="n">96</td><td class="n">—</td><td class="n" colspan="2">90% recall · 90% precision</td></tr>` +
+    rows.map(r => `<tr><td>Real, ${r.set}${r.set === "tuning" ? "" : " (detector frozen)"}</td><td class="n">${r.sites}</td><td class="n">${r.incomplete}</td><td class="n">${r.caught} of ${r.incomplete}</td><td class="n">${r.false_alarms}</td></tr>`).join("");
+}
+
+function tiles(d) {
+  const t50 = d.timing.filter(x => x.default === 1).pop().delay_ms;
+  const rd = d.retry.reduce((a, r) => a + r.default, 0) / d.retry.length, ra = d.retry.reduce((a, r) => a + r.actions, 0) / d.retry.length;
+  const held = d.real.filter(r => r.set !== "tuning"), mean = held.reduce((a, r) => a + r.default, 0) / held.length;
+  $("#tiles").innerHTML = [
+    [`~${t50 + 50} ms`, "default snapshot point: content arriving later is silently dropped"],
+    [`${pct(rd)} → ${pct(ra)}`, "synthetic recall, default → with actions (no extra credits)"],
+    [pct(mean), `mean coverage on ${held.length} held-out real sites, default settings`],
+  ].map(([v, l]) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+}
+
+let DATA;
+function render() { tiles(DATA); timingChart(DATA.timing); retryChart(DATA.retry); realChart(DATA.real); detTable(DATA.detector); }
+fetch("data.json").then(r => r.json()).then(d => { DATA = d; render(); });
+
+const root = document.documentElement;
+try { const s = localStorage.getItem("wf-theme"); if (s) root.dataset.theme = s; } catch (e) {}
+$("#theme").addEventListener("click", () => {
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("wf-theme", root.dataset.theme); } catch (e) {}
+  if (DATA) render();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => DATA && render());
+</script>
+</body>
+</html>
