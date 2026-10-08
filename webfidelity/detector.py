@@ -84,6 +84,12 @@ def detect(markdown, html=None):
             reasons[f"source_coverage_{cov:.0%}"] = 0.6
         if hooks and (thin or mounts):
             reasons["async_" + "+".join(hooks)] = 0.3 if not thin else 0.45
+        # client-rendered shell: the source carries almost no text, so all real
+        # content comes from JS. If the scrape adds nothing beyond the shell's
+        # own text, rendering never happened (or stopped early).
+        src_words = words(htmllib.unescape(TAG.sub(" ", html)))
+        if src_words < 60 and "<script" in html.lower() and words(md_text(markdown)) <= src_words + 30:
+            reasons["csr_shell_unrendered"] = 0.55
         if "shadow" in hooks and thin:
             reasons["shadow_root_thin_output"] = 0.3
 

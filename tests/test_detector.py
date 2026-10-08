@@ -17,3 +17,10 @@ def test_dropped_source_text_is_flagged():
     html = "<main>" + "".join(f"<p>Sentence number {i} has quite a few words in it.</p>" for i in range(6)) + "</main>"
     md = "Sentence number 0 has quite a few words in it."
     assert any(r.startswith("source_coverage") for r in detect(md, html)["reasons"])
+
+
+def test_unrendered_client_shell_is_flagged():
+    shell = '<html><body><div id="root"></div><script src="/app.js"></script></body></html>'
+    assert "csr_shell_unrendered" in detect("Quotes to Scrape", shell)["reasons"]
+    rendered = " ".join(["Albert Einstein said the world as we have created it is a process of our thinking."] * 5)
+    assert "csr_shell_unrendered" not in detect(rendered, shell)["reasons"]
