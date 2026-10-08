@@ -46,14 +46,14 @@ class PlaywrightScraper:
         self._pw.stop()
 
 
-def firecrawl_scrape(url):
+def firecrawl_scrape(url, **opts):
     """Firecrawl hosted API. maxAge=0 forces a fresh scrape, no cache, so
     repeated runs measure the pipeline and not the cache."""
     key = os.environ["FIRECRAWL_API_KEY"]
     for _ in range(6):
         r = requests.post("https://api.firecrawl.dev/v2/scrape",
                           headers={"Authorization": f"Bearer {key}"},
-                          json={"url": url, "formats": ["markdown"], "maxAge": 0},
+                          json={"url": url, "formats": ["markdown"], "maxAge": 0, **opts},
                           timeout=120)
         if r.status_code != 429:
             break

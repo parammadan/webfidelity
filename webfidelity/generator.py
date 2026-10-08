@@ -140,13 +140,13 @@ def pricing_table(rng):
     return shell("Plans and Pricing", body), f.items
 
 
-def js_rendered(rng):
+def js_rendered(rng, delay_ms=800):
     """Content injected by JavaScript after load, as in client-rendered apps."""
     f = Facts(rng)
     hidden = paragraphs(f, 3)
     body = '<p>Loading release notes...</p><div id="app"></div>'
     script = (f"setTimeout(() => {{ document.getElementById('app').innerHTML = "
-              f"wfDecode('{b64(hidden)}'); }}, 800);")
+              f"wfDecode('{b64(hidden)}'); }}, {delay_ms});")
     return shell("Release Notes", body, script), f.items
 
 
