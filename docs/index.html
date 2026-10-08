@@ -121,7 +121,7 @@ footer { margin-top: 64px; color: var(--muted); font-size: 13px; }
   </div>
 
   <h2>A detector that didn't generalize</h2>
-  <p>Can you tell that a scrape is incomplete <em>without</em> an answer key? A rule-based detector looked strong on synthetic pages, then fell apart on real held-out sites. Reading a site's external JS files didn't help either: scroll code shows up in 56% of complete sites and 60% of incomplete ones.</p>
+  <p>Can you tell that a scrape is incomplete <em>without</em> an answer key? A rule-based detector looked strong on synthetic pages, then fell apart on real held-out sites. Reading a site's external JS files didn't help either: scroll code shows up in 56% of complete sites and 60% of incomplete ones. A third version added one targeted signal and was tested on a fresh set: zero false alarms, but it still missed 5 of 6.</p>
   <div class="card"><table id="det"></table></div>
   <p><strong>Proposal:</strong> the signal that would make this reliable is one only the renderer has: how many requests were still pending, and how long the page had been quiet, when the snapshot was taken. Exposing that in response metadata would let callers retry only the scrapes that need it.</p>
 

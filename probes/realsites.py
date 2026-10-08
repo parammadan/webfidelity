@@ -142,11 +142,16 @@ def phase_score():
         d = OUT / s["slug"]
         if not (d / "ref2.txt").exists() or not (d / "fc_default.md").exists():
             continue
+        err = lambda lab: (json.loads((d / f"fc_{lab}.meta.json").read_text()).get("error")
+                           if (d / f"fc_{lab}.meta.json").exists() else None)
+        if err("default"):  # Firecrawl refused or failed: an error, not a miss
+            print(f"skip (firecrawl error) {s['url']}: {err('default')[:60]}")
+            continue
         ref = sentences((d / "ref1.txt").read_text()) & sentences((d / "ref2.txt").read_text())
         md_d, md_h = (d / "fc_default.md").read_text(), (d / "fc_heavy.md").read_text()
         det = detect(md_d, (d / "source.html").read_text())
         rows.append({**s, "ref_sentences": len(ref), "cov_default": coverage(ref, md_d),
-                     "cov_heavy": coverage(ref, md_h), "detector": det["score"], "reasons": det["reasons"],
+                     "cov_heavy": None if err("heavy") else coverage(ref, md_h), "detector": det["score"], "reasons": det["reasons"],
                      "words_default": len(tokens(md_d)), "words_heavy": len(tokens(md_h))})
     (OUT / "scores.json").write_text(json.dumps(rows, indent=2))
 
@@ -158,7 +163,7 @@ def phase_score():
               f" {pct(r['cov_heavy']):>6} {'YES' if r['detector'] >= 0.5 else '':>5}")
     ok = [r for r in rows if r["cov_default"] is not None]
     print(f"\nmean coverage over {len(ok)} sites: default {statistics.mean(r['cov_default'] for r in ok):.0%}"
-          f", heavy {statistics.mean(r['cov_heavy'] for r in ok):.0%}")
+          f", heavy {statistics.mean(r['cov_heavy'] for r in ok if r['cov_heavy'] is not None):.0%}")
 
 
 if __name__ == "__main__":

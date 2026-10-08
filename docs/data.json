@@ -292,7 +292,7 @@
    "url": "https://docs.firecrawl.dev/introduction",
    "category": "docs",
    "default": 1.0,
-   "actions": 0.0,
+   "actions": null,
    "ref_sentences": 67,
    "flagged": false,
    "reasons": [
@@ -686,6 +686,237 @@
    "reasons": [
     "source_coverage_36%"
    ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://quotes.toscrape.com/js-delayed/?delay=1000",
+   "category": "practice-js-delayed",
+   "default": 0.0,
+   "actions": 1.0,
+   "ref_sentences": 18,
+   "flagged": true,
+   "reasons": [
+    "async_timer",
+    "csr_shell_unrendered"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://webscraper.io/test-sites/e-commerce/scroll/computers/tablets",
+   "category": "practice-scroll",
+   "default": 0.071,
+   "actions": 0.071,
+   "ref_sentences": 14,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://www.scrapethissite.com/pages/advanced/",
+   "category": "practice-static",
+   "default": 0.875,
+   "actions": 0.875,
+   "ref_sentences": 8,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://crates.io/crates/serde",
+   "category": "csr",
+   "default": 0.652,
+   "actions": 0.652,
+   "ref_sentences": 23,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://crates.io/crates/tokio",
+   "category": "csr",
+   "default": 0.935,
+   "actions": 0.935,
+   "ref_sentences": 93,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://replicate.com/explore",
+   "category": "csr",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 148,
+   "flagged": false,
+   "reasons": [
+    "async_timer",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://www.npmjs.com/search?q=scraper",
+   "category": "csr",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 20,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://en.wikipedia.org/wiki/Retrieval-augmented_generation",
+   "category": "static",
+   "default": 0.81,
+   "actions": 0.826,
+   "ref_sentences": 121,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://news.ycombinator.com/newest",
+   "category": "static",
+   "default": 0.969,
+   "actions": 0.969,
+   "ref_sentences": 32,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://pkg.go.dev/net/http",
+   "category": "static",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 1540,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://docs.djangoproject.com/en/5.0/intro/tutorial01/",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 138,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://kubernetes.io/docs/concepts/overview/",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 87,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://docs.github.com/en/actions",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 19,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://docs.stripe.com/payments",
+   "category": "docs",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 15,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://techcrunch.com/",
+   "category": "news",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 92,
+   "flagged": false,
+   "reasons": [
+    "async_timer",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://www.theverge.com/",
+   "category": "news",
+   "default": 0.948,
+   "actions": 0.948,
+   "ref_sentences": 173,
+   "flagged": false,
+   "reasons": [
+    "async_fetch",
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://www.aljazeera.com/",
+   "category": "news",
+   "default": 0.293,
+   "actions": 0.299,
+   "ref_sentences": 147,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://coinmarketcap.com/",
+   "category": "data",
+   "default": 0.786,
+   "actions": 0.714,
+   "ref_sentences": 28,
+   "flagged": false,
+   "reasons": [
+    "placeholder_text"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://ourworldindata.org/co2-emissions",
+   "category": "data",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 215,
+   "flagged": false,
+   "reasons": []
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://www.goodreads.com/list/show/1.Best_Books_Ever",
+   "category": "app",
+   "default": 0.759,
+   "actions": 0.759,
+   "ref_sentences": 515,
+   "flagged": false,
+   "reasons": [
+    "reveal_button"
+   ]
+  },
+  {
+   "set": "held-out 2",
+   "url": "https://linear.app/changelog",
+   "category": "app",
+   "default": 1.0,
+   "actions": 1.0,
+   "ref_sentences": 174,
+   "flagged": false,
+   "reasons": [
+    "async_timer",
+    "placeholder_text"
+   ]
   }
  ],
  "detector": [
@@ -702,6 +933,13 @@
    "incomplete": 3,
    "caught": 1,
    "false_alarms": 3
+  },
+  {
+   "set": "held-out 2",
+   "sites": 21,
+   "incomplete": 6,
+   "caught": 1,
+   "false_alarms": 0
   }
  ]
 }

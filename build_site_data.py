@@ -43,7 +43,8 @@ def real():
             if r["cov_default"] is None or r["ref_sentences"] < 5:
                 continue
             out.append({"set": name, "url": r["url"], "category": r["category"],
-                        "default": round(r["cov_default"], 3), "actions": round(r["cov_heavy"], 3),
+                        "default": round(r["cov_default"], 3),
+                        "actions": None if r["cov_heavy"] is None else round(r["cov_heavy"], 3),
                         "ref_sentences": r["ref_sentences"], "flagged": r["detector"] >= 0.5,
                         "reasons": r["reasons"]})
     return out

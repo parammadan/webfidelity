@@ -69,9 +69,9 @@ finding 3.
 
 Minor: a fixed-position cookie banner leaked into every Firecrawl output.
 
-**On the normal web Firecrawl does well.** Mean coverage over 25 held-out
-real sites: 89% default, 94% with actions; 43 of 53 sites overall at 90% or
-better.
+**On the normal web Firecrawl does well.** Mean coverage over 46 held-out
+real sites: 85% default (held-out 1: 89% on 25 sites; held-out 2, which adds
+client-rendered apps: 81% on 21 sites). 56 of 74 real sites score 90% or better.
 
 ## A detector that didn't generalize
 
@@ -84,13 +84,20 @@ synthetic bench and fell apart on real sites:
 |---|---|---|
 | synthetic, held-out variants (v1) | 90% recall, 90% precision | |
 | real sites, tuning set (v2) | 2 of 2 | 5 of 26 |
-| real sites, held out (v2, frozen) | **1 of 3** | 3 of 22 |
+| real sites, held out 1 (v2, frozen) | **1 of 3** | 3 of 22 |
+| real sites, held out 2 (v3: + "unrendered shell" signal, frozen) | **1 of 6** | 0 of 15 |
 
 Why it failed on held-out sites:
 - Real sites load their JS from external bundles; the detector only reads
   inline scripts, so the scroll feed showed no signal at all.
 - The delayed-JS page scored 0.45 against a 0.5 threshold. The threshold was
   frozen before the held-out run and stays frozen.
+- Reading external JS doesn't fix it: scroll code appears in 56% of complete
+  sites and 60% of incomplete ones (`probes/scriptscan.py`), so it can't
+  separate them.
+- v3 added one signal (a JS-only page shell whose scrape adds no text beyond
+  the shell). On a fresh held-out set it caught the delayed-JS page with zero
+  false alarms, but still missed 5 of 6.
 
 **Proposal.** The signal that would make this reliable is one only the
 renderer has: how many network requests were still pending, and how long the
@@ -131,13 +138,18 @@ markdown links stripped and everything except letters and digits removed.
   selector caused a server error, and clicking a generic link navigated away.
   Now only `<button>` elements with plain selectors are clicked.
 
+- Firecrawl refused one held-out site (HTTP 403, speedtest.net); the first
+  real-site scorer counted it as 0% coverage. Errored scrapes are now excluded.
+
 ## Limitations
 
 - One week of measurements from one region; Firecrawl's renderer may change.
 - The real-site reference runs from a residential connection and Firecrawl
   from a datacenter, so bot walls can differ (AP News challenged the local
   browser; IMDb served Firecrawl an ad page). Sites with fewer than 5 stable
-  reference sentences are excluded.
+  reference sentences are excluded. On aljazeera.com (29%) the missing headlines
+  aren't in the raw source either, which points to a regional edition rather
+  than a render failure; it is still counted.
 - Finding 3 is shown on one synthetic and two real feeds; how many real sites
   use scroll listeners rather than IntersectionObserver isn't measured.
 
