@@ -6,6 +6,8 @@ after a deliberate delay, to simulate a slow API call.
 
 import functools
 import http.server
+import json
+import os
 import re
 import sys
 import threading
@@ -16,6 +18,11 @@ ROOT = "bench"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        log = os.environ.get("WF_REQUEST_LOG")
+        if log:
+            with open(log, "a") as f:
+                f.write(json.dumps({"t": time.time(), "path": self.path,
+                                    "ua": self.headers.get("User-Agent", "")}) + "\n")
         m = re.match(r"/slow/(\d+)(/.*)", self.path)
         if m:
             time.sleep(min(int(m.group(1)), 10000) / 1000)
