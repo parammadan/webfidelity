@@ -23,7 +23,7 @@ def load():
     seen, rows = set(), []
     for scores in sorted(Path("results").glob("*/scores.json")):
         for r in json.loads(scores.read_text()):
-            if r["error"] or (scores.parent.name, r["type"]) in skip:
+            if "error" not in r or r["error"] or (scores.parent.name, r["type"]) in skip:
                 continue
             md_path = scores.parent / r["scraper"] / r["page"] / f"run{r['run']}.md"
             key = (r["scraper"], r["page"], r["run"], scores.parent.name)

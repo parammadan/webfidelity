@@ -30,6 +30,17 @@ def words(text):
     return len(tokens(text))
 
 
+def md_text(markdown):
+    """Markdown -> plain text: images dropped, links reduced to their text."""
+    markdown = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", markdown)
+    return re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", markdown)
+
+
+def squash(text):
+    """Letters and digits only: immune to spacing, punctuation, table pipes."""
+    return "".join(tokens(text))
+
+
 def source_coverage(markdown, html):
     """Share of the source's own sentences that made it into the output.
     Catches content that was in the HTML all along (e.g. hidden tabs) but
@@ -38,12 +49,11 @@ def source_coverage(markdown, html):
     if main:  # boilerplate (nav, footer, banners) is fine to drop
         html = main.group(0)
     blocks = TAG.sub(" ", BLOCK.sub("\n", html)).splitlines()
-    sents = [" ".join(tokens(s)) for b in blocks for s in re.split(r"(?<=[.!?])\s", b)]
-    sents = [s for s in sents if s.count(" ") >= 5]
+    sents = [squash(s) for b in blocks for s in re.split(r"(?<=[.!?])\s", b) if words(s) >= 6]
     if len(sents) < 3:
         return None
-    flat = " " + " ".join(tokens(markdown)) + " "
-    return sum(f" {s} " in flat for s in sents) / len(sents)
+    flat = squash(md_text(markdown))
+    return sum(s in flat for s in sents) / len(sents)
 
 
 def detect(markdown, html=None):
@@ -87,8 +97,12 @@ def _prod(xs):
 
 def reveal_selector(html):
     """CSS selector for a 'Show more'-style button, if the source has one."""
-    m = re.search(r"<button\b([^>]*)>\s*(show|load|read|view|see)\s+(more|all)\b", html, re.I)
+    m = re.search(r"<(button|a)\b([^>]*)>\s*((show|load|read|view|see)\s+)?more\b", html, re.I)
     if not m:
         return None
-    id_ = re.search(r'\bid="([^"]+)"', m.group(1))
-    return f"#{id_.group(1)}" if id_ else "button"
+    tag, attrs = m.group(1).lower(), m.group(2)
+    id_ = re.search(r'\bid="([^"]+)"', attrs)
+    cls = re.search(r'\bclass="([^"]+)"', attrs)
+    if id_:
+        return f"#{id_.group(1)}"
+    return f"{tag}.{'.'.join(cls.group(1).split())}" if cls else tag
