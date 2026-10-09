@@ -108,7 +108,7 @@ every rule was tested on data it was never tuned on.
 - If it's an endless feed, scrolling won't help, so fetch its pages directly.
 - Whenever you measure anything, keep a test set you never tune on.
 
-Video (3 min): [https://youtu.be/fscMxvmFdgM](https://youtu.be/fscMxvmFdgM)
+Video (3 min): [https://youtu.be/SP0WAr39R-Y](https://youtu.be/SP0WAr39R-Y)
 · Code, data and method: [github.com/parammadan/webfidelity](https://github.com/parammadan/webfidelity)
 · Interactive results: [parammadan.github.io/webfidelity](https://parammadan.github.io/webfidelity/)
 
