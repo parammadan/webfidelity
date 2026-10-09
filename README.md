@@ -7,7 +7,7 @@ content, the agent answers from a partial page and nobody notices. WebFidelity
 measures that loss: on synthetic pages with a planted answer key, and on real
 sites against a patient-browser reference.
 
-▶ **3-minute explainer video:** [https://youtu.be/fscMxvmFdgM](https://youtu.be/fscMxvmFdgM) · **Interactive results:** [parammadan.github.io/webfidelity](https://parammadan.github.io/webfidelity/)
+▶ **Walkthrough video (v2):** *link coming* · **original explainer:** [https://youtu.be/fscMxvmFdgM](https://youtu.be/fscMxvmFdgM) · **Interactive results:** [parammadan.github.io/webfidelity](https://parammadan.github.io/webfidelity/)
 
 The main subject is [Firecrawl](https://firecrawl.dev). Trafilatura and a
 plain Playwright scraper are included for comparison.
@@ -29,6 +29,11 @@ later is dropped, and the output gives no sign of it: the heading and a
 
 Real site: `quotes.toscrape.com/js-delayed` (2 s delay) scored **0%** with
 defaults and **100%** with waits.
+
+**The cutoff moves.** Re-measured live on October 8: 300 ms and 500 ms were captured 3/3,
+1 s was captured 0/3. So the snapshot point was about 0.3 s one day and between 0.5 s and 1 s the
+next. Content arriving after a second was lost on both days. A moving cutoff is one more reason
+callers can't simply hard-code a wait (see the proposal below).
 
 **2. In-flight requests are not awaited.** On a page whose content comes from
 an API call that takes N ms, the server's request log shows Firecrawl's

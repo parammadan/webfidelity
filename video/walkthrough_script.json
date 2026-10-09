@@ -1,0 +1,74 @@
+[
+ {
+  "id": "w01",
+  "kind": "anim",
+  "visual": "hook",
+  "text": "Your AI agent might be answering from half a page. The scraper that feeds it can drop content without a trace. So I built a benchmark to measure exactly how much, and ran it on Firecrawl."
+ },
+ {
+  "id": "w01b",
+  "kind": "anim",
+  "visual": "intro",
+  "text": "I'm Param Madan, an AI engineer. I build LLM evaluation pipelines, with multi-judge scoring and adversarial tests, for Verizon at the Institute for Experiential AI. Before that, I was an AI software co-op at MIT. Measuring what models actually see is my day job."
+ },
+ {
+  "id": "w02",
+  "kind": "anim",
+  "visual": "problem",
+  "text": "Here's the problem. AI agents don't read web pages. A scraper turns each page into text first. Modern pages load in pieces: prices a second later, posts as you scroll. If the scraper looks too early, that content is gone, and the output still looks complete."
+ },
+ {
+  "id": "w03",
+  "kind": "anim",
+  "visual": "method",
+  "text": "You can't measure what's missing without an answer key. So I generated thirty six web pages, planted two hundred forty facts in them, like prices, product codes and counts, then counted how many survived each scrape."
+ },
+ {
+  "id": "w04",
+  "kind": "terminal",
+  "visual": "timing",
+  "text": "First finding. Content that arrives after the snapshot is simply gone, and the snapshot point moves. On one day it was about a third of a second; the next day, between half a second and one. Either way, content that arrives after a second is lost every time. And look at what comes back: a heading, and the word loading."
+ },
+ {
+  "id": "w05",
+  "kind": "anim",
+  "visual": "request",
+  "text": "Second finding. My server logs show Firecrawl's browser does send the page's data request, about a quarter of a second in. Then it takes the snapshot before the answer arrives. A one second API call is lost every time."
+ },
+ {
+  "id": "w06",
+  "kind": "terminal",
+  "visual": "viewport",
+  "text": "The third finding is stranger. Asked from inside the page, Firecrawl's browser window is one hundred thousand pixels tall. It can never scroll, so feeds that load as you scroll never load. On two real infinite scroll sites, it captured nine percent."
+ },
+ {
+  "id": "w07",
+  "kind": "browser",
+  "visual": "docs",
+  "text": "The good news: Firecrawl already has the fix. Actions let you wait, scroll or click before the snapshot. On my test pages, recall goes from fifty two percent to eighty nine percent, at the same price. One credit per page."
+ },
+ {
+  "id": "w08",
+  "kind": "browser",
+  "visual": "realweb",
+  "text": "And on the real web, Firecrawl is strong. On forty six sites I never tuned anything on, it captured eighty five percent by default. But both failures still showed up on real sites."
+ },
+ {
+  "id": "w09",
+  "kind": "anim",
+  "visual": "honest",
+  "text": "One thing I built did fail. A detector to flag incomplete scrapes without an answer key. It was right nine times in ten on my own pages, and caught two of nine on real sites it had never seen. Rules tuned on your own data can fool you."
+ },
+ {
+  "id": "w10",
+  "kind": "anim",
+  "visual": "proposal",
+  "text": "That points to the fix I'd propose. Only the renderer knows whether requests were still pending when it took the snapshot. Put that in the response, and every caller can retry exactly the pages that need it. I'd love to help build it."
+ },
+ {
+  "id": "w11",
+  "kind": "anim",
+  "visual": "outro",
+  "text": "Measure what your agent actually sees. The code, the data and every result are public. I'm Param Madan. If you're on the evaluation team at Firecrawl, let's talk."
+ }
+]
