@@ -7,7 +7,7 @@ content, the agent answers from a partial page and nobody notices. WebFidelity
 measures that loss: on synthetic pages with a planted answer key, and on real
 sites against a patient-browser reference.
 
-▶ **Walkthrough video (v2):** *link coming* · **original explainer:** [https://youtu.be/fscMxvmFdgM](https://youtu.be/fscMxvmFdgM) · **Interactive results:** [parammadan.github.io/webfidelity](https://parammadan.github.io/webfidelity/)
+▶ **3-minute explainer video:** [https://youtu.be/fscMxvmFdgM](https://youtu.be/fscMxvmFdgM) · **Interactive results:** [parammadan.github.io/webfidelity](https://parammadan.github.io/webfidelity/)
 
 The main subject is [Firecrawl](https://firecrawl.dev). Trafilatura and a
 plain Playwright scraper are included for comparison.
